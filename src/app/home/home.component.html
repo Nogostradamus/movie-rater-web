@@ -1,3 +1,55 @@
 <p>
-  home works!
+  Welcome {{ account.username }}
 </p>
+
+<button mat-ripple mat-raised-button (click)="logoutClicked()" 
+    color="accent">Logout</button><br>
+
+<div class="container">
+  <h2>Movies:</h2>
+  <div *ngFor="let movie of movies;" (click)="movieClicked(movie)" class="movieClickable">
+    <h4>{{movie.title}}</h4>
+  </div>
+  <button mat-ripple mat-raised-button (click)="addMovieClicked()" 
+    color="accent">Add New</button>
+</div>
+<div class="container">
+    <div *ngIf="selectedMovie && !isAddEditMode">
+        <h2>Details:</h2>
+        <h4>{{selectedMovie.title}}</h4>
+        <p>{{selectedMovie.description}}</p>
+        <button mat-ripple mat-raised-button (click)="editMovieClicked()" 
+    color="accent">Edit Movie</button>
+    <button mat-ripple mat-raised-button (click)="deleteMovieClicked()" 
+    color="warn">Remove Movie</button>
+    </div>
+    <div *ngIf="isAddEditMode">
+        <h2>
+            <span *ngIf="isEdit">Edit</span>
+            <span *ngIf="!isEdit">New</span>
+             Movie:
+        </h2>
+        <form (ngSubmit)="submitMovie()" [formGroup]="movieInput">
+            <div class="form-group">
+              <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Title" formControlName="title">
+                  <mat-error *ngIf="movieInput.get('title').hasError('required')">
+                    Title is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+            <br>
+            <mat-form-field class="example-full-width">
+                <textarea matInput placeholder="Description" formControlName="description">
+                  </textarea>
+                <mat-error *ngIf="movieInput.get('description').hasError('required')">
+                  Description is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              </div>
+            <button mat-ripple mat-raised-button type="submit" [disabled]="movieInput.invalid || loading"
+            color="primary">Save</button><br>
+            <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
+          </form>
+    </div>
+</div>
+

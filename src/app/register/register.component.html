@@ -1,6 +1,38 @@
-<p>
-  register works!
-</p>
+<h1> Register </h1>
+<form (ngSubmit)="onRegister()" [formGroup]="userRegister">
+  <div class="form-group">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Username" formControlName="username">
+        <mat-error *ngIf="userRegister.get('username').hasError('required')">
+          Username is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+  <br>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-error *ngIf="userRegister.get('email').hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userRegister.get('email').hasError('email')">
+          Wrong email format
+        </mat-error>
+      </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+      <input matInput type="password" placeholder="Password" formControlName="password">
+      <mat-error *ngIf="userRegister.get('password').hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="userRegister.get('password').hasError('minlength')">
+        Password has to be at least 6 chars
+      </mat-error>
+    </mat-form-field>
+<br>
+    <button mat-ripple mat-raised-button type="submit"
+     [disabled]="userRegister.invalid || loading" color="primary">Register</button><br>
+  </div>
+</form>
+<mat-spinner *ngIf="loading"></mat-spinner>
 
 
 <a [routerLink]="['/login']">Do you have an account already? Login in</a>

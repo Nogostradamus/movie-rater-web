@@ -1,0 +1,8 @@
+.container {
+    width: 50%;
+    float: left;
+}
+.movieClickable {
+    cursor: pointer;
+    border: 1px solid #444;
+}
