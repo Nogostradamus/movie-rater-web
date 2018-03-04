@@ -1,0 +1,23 @@
+<h1> Login </h1>
+<form (ngSubmit)="onLogin()" [formGroup]="userLogin">
+  <div class="form-group">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Username" formControlName="username">
+        <mat-error *ngIf="userLogin.get('username').hasError('required')">
+          Username is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+      <input matInput type="password" placeholder="Password" formControlName="password">
+      <mat-error *ngIf="userLogin.get('password').hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    </div>
+<button mat-ripple mat-raised-button type="submit" [disabled]="userLogin.invalid || loading"
+ color="primary">Login</button><br>
+</form>
+<br>
+
+<a [routerLink]="['/register']">Don't have an accoount? Register here</a>
