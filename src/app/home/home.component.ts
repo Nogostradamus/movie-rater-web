@@ -7,12 +7,13 @@ import { MovieService } from '../services/movie.service';
 import { Movie } from '../models/movie';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { RatingService } from '../services/rating.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [MovieService]
+  providers: [MovieService, RatingService]
 })
 export class HomeComponent implements OnInit {
 
@@ -23,10 +24,11 @@ export class HomeComponent implements OnInit {
   movieInput: FormGroup;
   isAddEditMode: boolean;
   isEdit: boolean;
+  my_rating: number;
 
   constructor(private global: GlobalService, private router: Router,
     private movieService: MovieService, private fb: FormBuilder,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, private ratingsService: RatingService) { }
 
   ngOnInit() {
     this.userSub = this.global.user.subscribe(
@@ -44,6 +46,7 @@ export class HomeComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required]
     });
+    this.my_rating = 3;
   }
   getMovies() {
     this.movieService.getMovies().subscribe(
@@ -117,7 +120,19 @@ export class HomeComponent implements OnInit {
     this.selectedMovie = movie;
     this.isAddEditMode = false;
   }
-  private logoutClicked() {
+  newRate(my_rating) {
+    this.ratingsService.addRating(this.account.id, this.selectedMovie.id, my_rating).subscribe(
+      data => {
+        const movieIndx = this.movies.map(function(e) {return e.id; }).indexOf(this.selectedMovie.id);
+        if (movieIndx >= 0) {
+          this.movies[movieIndx] = data['result'];
+        }
+        this.selectedMovie = data['result'];
+      },
+      error => this.snackBar.open('Error. Please Try Again.', '', { duration: 3000 })
+    );
+  }
+  logoutClicked() {
     this.global.me = new User();
     localStorage.removeItem('token');
     localStorage.removeItem('account');

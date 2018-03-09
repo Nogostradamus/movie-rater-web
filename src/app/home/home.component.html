@@ -18,10 +18,17 @@
         <h2>Details:</h2>
         <h4>{{selectedMovie.title}}</h4>
         <p>{{selectedMovie.description}}</p>
+        <ngb-rating [rate]="selectedMovie.avg_rating" (hover)="hovered=$event" (leave)="hovered=0"
+         [readonly]="true" max="5"></ngb-rating> ({{selectedMovie.no_of_ratings}})<br>
         <button mat-ripple mat-raised-button (click)="editMovieClicked()" 
     color="accent">Edit Movie</button>
     <button mat-ripple mat-raised-button (click)="deleteMovieClicked()" 
     color="warn">Remove Movie</button>
+
+    <h3>Rate it:</h3>
+    <ngb-rating [rate]="my_rating" (hover)="hovered=$event" max="5"
+        (rateChange)="newRate($event)"></ngb-rating>
+
     </div>
     <div *ngIf="isAddEditMode">
         <h2>
